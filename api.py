@@ -69,8 +69,9 @@ async def web_ui(request: Request):
     """Web UI for PR reviews"""
     return templates.TemplateResponse("index.html", {"request": request})
 
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "HEAD"])  # ✅ FIXED THIS LINE!
 def health():
+    """Health check endpoint - accepts GET and HEAD for monitoring"""
     groq = bool(os.getenv("GROQ_API_KEY"))
     github = bool(os.getenv("GITHUB_TOKEN"))
     
@@ -99,7 +100,7 @@ def health():
                 "status": "active" if groq else "not_configured"
             }
         ],
-        "orchestration": "Sequential Multi-Agent Process",
+        "orchestration": "Parallel Multi-Agent Process",  
         "llm": {
             "provider": "Groq",
             "model": "llama-3.3-70b-versatile",
