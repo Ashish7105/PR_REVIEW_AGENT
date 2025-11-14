@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PR Review Agent - AI Code Reviewer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .example-card {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .example-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .example-card h3 {
+            color: #667eea;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+        
+        .example-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .result {
+            display: none;
+        }
+        
+        .agent-result {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .agent-result h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .agent-result .role {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .agent-result .findings {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            white-space: pre-wrap;
+            font-size: 0.9rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 PR Review Agent</h1>
+            <p>AI-Powered Multi-Agent Code Review System</p>
+        </div>
+        
+        <div class="card">
+            <h2 style="margin-bottom: 20px;">Try Example PRs</h2>
+            <div class="examples">
+                <div class="example-card" onclick="fillExample('nodejs/node', 1)">
+                    <h3>🔒 Node.js Security</h3>
+                    <p>OpenSSL security update</p>
+                </div>
+                <div class="example-card" onclick="fillExample('facebook/react', 1)">
+                    <h3>⚛️ React Testing</h3>
+                    <p>Testing infrastructure</p>
+                </div>
+                       <div class="example-card" onclick="fillExample('django/django', 1)">
+                    <h3>🌐 Django Framework</h3>
+                    <p>Web framework changes</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 style="margin-bottom: 20px;">Review a Pull Request</h2>
+            <div class="input-group">
+                <label>Repository (owner/repo)</label>
+                <input type="text" id="repo" placeholder="nodejs/node" value="nodejs/node">
+            </div>
+            <div class="input-group">
+                <label>PR Number</label>
+                <input type="number" id="pr_number" placeholder="1" value="1">
+            </div>
+            <button class="btn" onclick="reviewPR()">
+                🚀 Start Review
+            </button>
+        </div>
+        
+        <div class="card loading" id="loading">
+            <div class="spinner"></div>
+            <p>Analyzing code with 4 AI agents...</p>
+            <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">This may take 30-60 seconds</p>
+        </div>
+        
+        <div class="card result" id="result">
+            <h2 style="margin-bottom: 20px;">Review Results</h2>
+            <div id="results-container"></div>
+        </div>
+    </div>
+    
+    <script>
+        function fillExample(repo, prNumber) {
+            document.getElementById('repo').value = repo;
+            document.getElementById('pr_number').value = prNumber;
+        }
+        
+        async function reviewPR() {
+            const repo = document.getElementById('repo').value;
+            const prNumber = document.getElementById('pr_number').value;
+            
+            if (!repo || !prNumber) {
+                alert('Please enter both repository and PR number');
+                return;
+            }
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            
+            try {
+                const response = await fetch('/review', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        repo: repo,
+                        pr_number: parseInt(prNumber)
+                    })
+                });
+                
+                const data = await response.json();
+                
+                document.getElementById('loading').style.display = 'none';
+                
+                if (response.ok) {
+                    displayResults(data);
+                } else {
+                    alert('Error: ' + (data.detail || 'Unknown error'));
+                }
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                alert('Error: ' + error.message);
+            }
+        }
+        
+        function displayResults(data) {
+            const container = document.getElementById('results-container');
+            container.innerHTML = `
+                <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h3>${data.pr_title}</h3>
+                    <p style="color: #666; margin-top: 5px;">
+                        By ${data.pr_author} • ${data.files_reviewed} files reviewed
+                    </p>
+                    <a href="${data.pr_url}" target="_blank" style="color: #667eea; text-decoration: none;">
+                        View on GitHub →
+                    </a>
+                </div>
+            `;
+            
+            data.reviews.forEach(fileReview => {
+                container.innerHTML += `
+                    <h3 style="margin: 20px 0 10px; color: #333;">
+                        📁 ${fileReview.file}
+                        <span style="color: #28a745; font-size: 0.9rem;">+${fileReview.additions}</span>
+                        <span style="color: #dc3545; font-size: 0.9rem;">-${fileReview.deletions}</span>
+                    </h3>
+                `;
+                
+                fileReview.agents.forEach(agent => {
+                    container.innerHTML += `
+                        <div class="agent-result">
+                            <h3>
+                                ${agent.agent_name}
+                                <span class="badge">${agent.issues_found} issues</span>
+                            </h3>
+                            <p class="role">${agent.agent_role}</p>
+                            <div class="findings">${agent.findings}</div>
+                        </div>
+                    `;
+                });
+            });
+            
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
