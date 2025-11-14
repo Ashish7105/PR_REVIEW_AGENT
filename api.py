@@ -32,7 +32,7 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-# ============= MODELS =============
+# Models
 class PRRequest(BaseModel):
     repo: str
     pr_number: int
@@ -57,8 +57,7 @@ class PRReviewResponse(BaseModel):
     files_reviewed: int
     reviews: List[FileReview]
 
-# ============= ENDPOINTS =============
-
+# Endpoints
 @app.get("/", include_in_schema=False)
 async def redirect_to_ui():
     """Redirect root to UI"""
