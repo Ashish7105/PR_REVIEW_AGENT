@@ -15,7 +15,6 @@
 
 **🚀 Try it now:** [https://pr-review-agent-9tkx.onrender.com/ui](https://pr-review-agent-9tkx.onrender.com/ui)
 
-**📊 Uptime Monitoring:** 99.9% availability (monitored 24/7 with UptimeRobot)
 
 ---
 
@@ -190,7 +189,6 @@ Our system employs 4 specialized AI agents, each an expert in their domain:
 | Service | Purpose | Tier |
 |---------|---------|------|
 | **Render** | Cloud hosting | Free (with auto-deploy) |
-| **UptimeRobot** | 24/7 monitoring | Free (5-min intervals) |
 | **GitHub Actions** | CI/CD (optional) | Free |
 
 ---
@@ -367,6 +365,7 @@ Once running, visit these endpoints:
 5. **Configure** environment variables:
    - `GROQ_API_KEY`
    - `GITHUB_TOKEN`
+     
 6. **Deploy!** Render handles the rest
 
 **Build Command:** `pip install -r requirements.txt`  
@@ -378,43 +377,8 @@ docker build -t pr-review-agent .
 docker run -p 8000:8000 --env-file .env pr-review-agent
 
 
----
-
-## 📁 Project Structure
-
-PR_REVIEW_AGENT/
-├── api.py # Main FastAPI application
-├── requirements.txt # Python dependencies
-├── .env.example # Environment template
-├── .gitignore # Git ignore rules
-├── README.md # This file
-├── LICENSE # MIT License
-│
-├── src/
-│ └── pr_review_agent/
-│ ├── init.py
-│ ├── reviewer.py # Multi-agent review logic
-│ └── services/
-│ ├── init.py
-│ └── github_service.py # GitHub API integration
-│
-└── templates/
-└── index.html # Web UI template
 
 
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
-3. **Commit** your changes (`git commit -m 'Add AmazingFeature'`)
-4. **Push** to the branch (`git push origin feature/AmazingFeature`)
-5. **Open** a Pull Request
-
----
 
 ## 📄 License
 
@@ -427,8 +391,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Ashish Kumar**
 
 - 🌐 GitHub: [@Ashish7105](https://github.com/Ashish7105)
-- 💼 LinkedIn: [Connect with me](https://linkedin.com/in/your-profile)
-- 📧 Email: your.email@example.com
+- 💼 LinkedIn: [Connect with me](https://www.linkedin.com/in/ashish-kumar-codes/)
+- 📧 Email: ashishkum7105@gmail.com
 
 ---
 
@@ -459,5 +423,6 @@ Made with ❤️ by Ashish Kumar
 [Live Demo](https://pr-review-agent-9tkx.onrender.com/ui) • [Report Bug](https://github.com/Ashish7105/PR_REVIEW_AGENT/issues) • [Request Feature](https://github.com/Ashish7105/PR_REVIEW_AGENT/issues)
 
 </div>
+
 
 
