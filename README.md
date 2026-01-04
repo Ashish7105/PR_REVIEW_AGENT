@@ -367,7 +367,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🎯 Built For
 
-**Lyzr Agent API Hackathon 2025**
 
 Showcasing the power of multi-agent AI systems for automated code review and quality assurance in software development workflows.
 
@@ -382,6 +381,7 @@ Made with ❤️ by Ashish Kumar
 [Live Demo](https://pr-review-agent-9tkx.onrender.com/ui) • [Report Bug](https://github.com/Ashish7105/PR_REVIEW_AGENT/issues) • [Request Feature](https://github.com/Ashish7105/PR_REVIEW_AGENT/issues)
 
 </div>
+
 
 
 
