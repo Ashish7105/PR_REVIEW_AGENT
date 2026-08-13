@@ -1,4 +1,4 @@
-# 🤖 PR Review Agent
+ # 🤖 PR Review Agent
 
 > AI-powered multi-agent code review system using Groq Llama 3.3 70B and parallel processing
 
@@ -91,7 +91,6 @@ Our system employs 4 specialized AI agents, each an expert in their domain:
 
 ---
 
-## 🏗️ Architecture
 
 ## 🏗️ Architecture
 
